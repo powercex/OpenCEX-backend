@@ -26,7 +26,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_THROTTLE_RATES': {
         'anon': '5/second',
-        'user': '10/second',
+        'user': '100/second',
         'dj_rest_auth': '10/second',
     },
     'EXCEPTION_HANDLER': 'lib.utils.exception_handler',
