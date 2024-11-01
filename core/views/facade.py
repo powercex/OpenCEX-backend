@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.http import HttpResponse
+from django.db.models import JSONField
 from django.utils import translation, timezone
 from django.utils.timezone import now
 from django_countries import countries
@@ -45,7 +46,7 @@ from core.tasks.facade import notify_sof_verification_request_admin
 from core.utils.facade import generate_sitemap
 from core.utils.stats.daily import get_filtered_pairs_24h_stats
 from lib.filterbackend import FilterBackend
-from lib.services.sumsub_client import SumSubClient
+from lib.services.persona_client import PersonaClient
 from lib.services.twilio import TwilioClient
 from lib.services.twilio import twilio_client
 from lib.throttling import PhoneVerificationThrottle
@@ -80,8 +81,8 @@ def kyc_get_access_token(request):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     usr_email = request.user.email
-    client = SumSubClient(host='https://test-api.sumsub.com' if settings.DEBUG else SumSubClient.HOST)
-    result = client.get_acces_token(usr_email)
+    usr = User.objects.get(username=usr_email)
+    result = {'token': usr_email, 'userId': usr.id }
     return Response(status=status.HTTP_200_OK, data=result)
 
 
@@ -91,6 +92,28 @@ def kyc_get_access_token(request):
 @api_view(['POST'])
 @permission_classes((AllowAny,))
 def kyc_callback_url(request):
+    data = request.data
+    token = data.get('token')
+    inquiryId = data.get('inquiryId')
+    fields = data.get('fields')
+    sstatus = data.get('status')
+    params = {
+        'applicantId': inquiryId,
+        'moderationComment': sstatus,
+        'kyc_data': fields or {},
+        'last_kyc_data_update': timezone.now()
+    }
+    if sstatus == "completed":
+        params['reviewAnswer'] = UserKYC.ANSWER_GREEN
+    elif sstatus == "failed":
+        params['reviewAnswer'] = UserKYC.ANSWER_RED
+    else:
+        params['reviewAnswer'] = sstatus
+
+    usr = User.objects.get(username=token)
+    UserKYC.objects.filter(user=usr).update(**params)
+    return Response(status=status.HTTP_200_OK)
+'''
     validation_token = request.headers.get('X-Payload-Digest')
     calculated_token = hmac.new(
         settings.SUMSUM_CALLBACK_VALIDATION_SECRET.encode('utf-8'),
@@ -137,7 +160,7 @@ def kyc_callback_url(request):
         logger.info(f'#kyc_callback_url data: %s', data)
 
     return Response(status=status.HTTP_200_OK)
-
+'''
 
 @extend_schema_view(
     post=extend_schema(

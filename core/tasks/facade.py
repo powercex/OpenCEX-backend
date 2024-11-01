@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from core.models.facade import AccessLog
 from core.models.facade import LoginHistory
 from core.models.facade import UserKYC
-from lib.services.sumsub_client import SumSubClient
+from lib.services.persona_client import PersonaClient
 from lib.notifications import send_telegram_message
 from lib.utils import get_domain
 
@@ -67,7 +67,7 @@ def update_kyc_data_for_user(user_id):
     if not userkyc.applicantId:
         return
 
-    client = SumSubClient(host='https://test-api.sumsub.com' if settings.DEBUG else SumSubClient.HOST)
+    client = PersonaClient()
 
     userkyc.kyc_data = client.get_applicant_data(
         userkyc.applicantId
