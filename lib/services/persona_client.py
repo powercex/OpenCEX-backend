@@ -38,4 +38,4 @@ class PersonaClient:
             raise
 
     def get_applicant_data(self, applicantId):
-        return self.get(f'/inquiries/{applicantId}').fields
+        return self.get(f'{HOST}/inquiries/{applicantId}').fields
