@@ -3,10 +3,12 @@ COMMON_COINS_INFO = {
         'ETH': 'ERC-20',
         'TRX': 'TRC-20',
         'BNB': 'BEP-20',
+        'MATIC': 'ERC-20'
     },
     'token_tx_explorers': {
         'ETH': 'https://etherscan.io/tx/', 
         'BNB': 'https://bscscan.com/tx/', 
         'TRX': 'https://tronscan.io/#/transaction/',
+        'MATIC': 'https://polygonscan.com/tx/'
     },
 }

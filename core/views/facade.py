@@ -650,7 +650,8 @@ class CodePhoneVerification(views.APIView):
                           "blockchain_list": [
                             "ETH",
                             "BNB",
-                            "TRX"
+                            "TRX",
+                            "MATIC"
                           ]
                         },
                         "stack_precisions": [
@@ -685,7 +686,8 @@ class CodePhoneVerification(views.APIView):
                           "blockchain_list": [
                             "ETH",
                             "BNB",
-                            "TRX"
+                            "TRX",
+                            "MATIC"
                           ]
                         },
                         "stack_precisions": [

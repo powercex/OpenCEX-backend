@@ -2,7 +2,9 @@ from typing import Dict
 
 from core.consts.currencies import BEP20_CURRENCIES
 from core.consts.currencies import ERC20_CURRENCIES
+from core.consts.currencies import ERC20_MATIC_CURRENCIES
 from core.consts.currencies import TRC20_CURRENCIES
+
 from core.currency import Currency, TokenParams
 
 
@@ -16,6 +18,7 @@ def get_token_contract_address(token_currency_code: str, blockchain_currency_cod
         'ETH': ERC20_CURRENCIES,
         'TRX': TRC20_CURRENCIES,
         'BNB': BEP20_CURRENCIES,
+        'MATIC': ERC20_MATIC_CURRENCIES
     }
 
     if blockchain_currency_code not in blockchain_tokens_dict:

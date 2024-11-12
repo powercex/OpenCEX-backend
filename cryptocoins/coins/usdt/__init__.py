@@ -22,5 +22,10 @@ BLOCKCHAINS = {
         origin_energy_limit=10000000,
         consume_user_resource_percent=30,
     ),
+    'MATIC': TokenParams(
+        symbol=CODE,
+        contract_address='0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+        decimal_places=6,
+    )
 }
 USDT_CURRENCY = register_token(USDT, CODE, BLOCKCHAINS)
